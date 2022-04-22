@@ -17,16 +17,16 @@ class ReportService implements IReportService
        $this->reportRepository = $reportRepository;
     }
 
-    public function list()
+    public function list($data)
     {
-        $data = $this->reportRepository->list();
+        $data = $this->reportRepository->list($data);
         return $data;
     }
 
 
     public function add(string $title, string $category, string $description, int $user_id)
     {
-        $description =   Hash::make($description);
+
         $data = $this->reportRepository->add($title, $category, $description, $user_id);
         return $data;
     }
@@ -40,7 +40,6 @@ class ReportService implements IReportService
 
     public function edit(int $id, string $title, string $category, string $description, int $user_id)
     {
-        $description =   Hash::make($description);
         $data = $this->reportRepository->edit($id,$title, $category, $description, $user_id);
         return $data;
     }

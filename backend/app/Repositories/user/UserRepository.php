@@ -20,7 +20,7 @@ class UserRepository  implements IUserRepository
 
     public function list()
     {
-        return $this->user::paginate(10);
+        return $this->user::all();
     }
 
     public function add(string $name, string $msisdn, ?string $password, string $access_level,string $external_id, string $email)

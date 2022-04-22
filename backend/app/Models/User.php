@@ -17,14 +17,14 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'msisdn',
         'external_id',
-        'access_level',
-        'mlearn_id'
+        'access_level'
     ];
 
     /**
@@ -32,6 +32,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
     protected $hidden = [
         'password',
         'remember_token',
@@ -45,4 +46,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function reports() {
+        return $this->hasMany(Report::class,'user_id','id');
+    }
 }

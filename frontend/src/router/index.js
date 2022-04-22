@@ -10,10 +10,16 @@ const router = createRouter({
       component: HomeView
     },
     {
-    path: "/reports",
-    alias: "/reports",
-    name: "reports",
-    component: () => import("../views/reports/ReportListView.vue")
+    path: "/reports-add",
+    alias: "/reports-add",
+    name: "reports-add",
+    component: () => import("../views/reports/ReportAddView.vue")
+    },
+    {
+    path: "/reports-edit",
+    alias: "/reports-edit",
+    name: "reports-edit",
+    component: () => import("../views/reports/ReportEditView.vue")
     },
     // {
     // path: "/report/:id",

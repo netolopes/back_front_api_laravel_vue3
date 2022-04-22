@@ -1,9 +1,9 @@
 <script setup>
-import ReportListComponent from '@/components/reports/ReportListComponent.vue'
+import ReportVuexListComponent from '@/components/reports/ReportVuexListComponent.vue'
 </script>
 
 <template>
   <main>
-    <ReportListComponent />
+    <ReportVuexListComponent />
   </main>
 </template>

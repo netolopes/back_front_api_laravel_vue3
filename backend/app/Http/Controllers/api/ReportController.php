@@ -26,14 +26,18 @@ class ReportController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
+        $data = (object)$request->only([
+            'page',
+            'search'
+        ]);
 
          try{
 
-             $data = $this->reportService->list();
-             return ReportResource::collection($data);
-
+             $data = $this->reportService->list($data);
+            // return ReportResource::collection($data);
+            return $data;
          } catch (\Exception $e) {
              return response()->json(
                  [
@@ -50,7 +54,7 @@ class ReportController extends Controller
     {
 
         try{
-            DB::beginTransaction();
+         //   DB::beginTransaction();
 
             $data = (object)$request->only([
                 'title',
@@ -59,15 +63,16 @@ class ReportController extends Controller
                 'user_id'
             ]);
 
-            $data = $this->reportService->add($data->title,$data->category,$data->descriptio,$data->user_id);
 
-            DB::commit();
+            $data = $this->reportService->add($data->title,$data->category,$data->description,$data->user_id);
+
+      //      DB::commit();
 
             return $data;
 
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error($e);
+        //    DB::rollBack();
+        //    Log::error($e);
 
             return response()->json(
                 [
@@ -83,10 +88,12 @@ class ReportController extends Controller
 
     public function show($id)
     {
+
         try{
 
             $data = $this->reportService->listBy($id);
-            return new ReportResource($data);
+           // return new ReportResource($data);
+           return $data;
 
         } catch (\Exception $e) {
             return response()->json(
@@ -113,7 +120,7 @@ class ReportController extends Controller
                 'user_id'
             ]);
 
-            $data = $this->reportService->edit($data->id,$data->title,$data->category,$data->descriptio,$data->user_id);
+            $data = $this->reportService->edit($data->id,$data->title,$data->category,$data->description,$data->user_id);
             return $data;
 
         } catch (\Exception $e) {
@@ -128,15 +135,11 @@ class ReportController extends Controller
 
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
 
-            $data = (object)$request->only([
-                'id'
-            ]);
-
-            $data = $this->reportService->delete($data->id);
+            $data = $this->reportService->delete($id);
             return $data;
 
         } catch (\Exception $e) {

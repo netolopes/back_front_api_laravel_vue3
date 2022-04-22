@@ -32,6 +32,6 @@ Route::prefix('report')->group(function () {
     Route::get('/show/{id}', [ReportController::class,'show']);
     Route::post('/create', [ReportController::class,'store']);
     Route::put('/edit', [ReportController::class,'update']);
-    Route::delete('/delete', [ReportController::class,'destroy']);
+    Route::delete('/delete/{id}', [ReportController::class,'destroy']);
 });
 

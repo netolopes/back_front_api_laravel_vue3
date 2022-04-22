@@ -3,7 +3,7 @@ namespace App\Repositories\report;
 
 use App\Models\Report;
 use App\Repositories\Contracts\IReportRepository;
-
+use Illuminate\Support\Facades\DB;
 
 class ReportRepository  implements IReportRepository
 {
@@ -18,9 +18,21 @@ class ReportRepository  implements IReportRepository
        $this->report = $report;
     }
 
-    public function list()
+    public function list($data)
     {
-        return $this->report::paginate(10);
+
+        $result = "";
+        if($data->search == ''){
+            $result =  $this->report::select(['id','title','category','description','user_id'])->with('users:id,name,email')->paginate(5);
+        }else{
+            $result = $this->report::select(['id','title','category','description','user_id'])->with('users:id,name,email')
+                ->where('title', 'like', '%'.$data->search.'%')
+                ->orderBy('id')
+                ->cursorPaginate(5);
+
+        }
+        return $result;
+
     }
 
     public function add(string $title, string $category, string $description, int $user_id)
@@ -45,7 +57,7 @@ class ReportRepository  implements IReportRepository
 
     public function listBy(int $id)
     {
-        $data =  $this->report::findOrFail($id);
+         $data =  $this->report::select(['id','title','category','description','user_id'])->with('users:id,name,email')->findOrFail($id);
         return $data;
     }
 

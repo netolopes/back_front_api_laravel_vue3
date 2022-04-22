@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row justify-content-center mt-2 mb-2">
       <div class="col-8">
-        <h4 class="text-left mb-2">All Products</h4>
+        <h4 class="text-left mb-2">All Products  </h4>
       </div>
       <!-- div class="col-4">
         <input
@@ -22,7 +22,7 @@
           <div class="col-2">category</div>
         </div>
 
-        <div v-for="(item, index) in tutorials.dados" :key="item.id">
+        <div v-for="(item, index) in reportList.data" :key="item.id">
           <report-detail :index="index" :arr="item" />
         </div>
       </div>
@@ -36,15 +36,14 @@
     </div>
 
     <!-- Insert Pagination Part -->
-    <!-- div v-if="productsPaginatedData !== null" class="vertical-center mt-2 mb-5">
+    <div  class="vertical-center mt-2 mb-5">
       <v-pagination
-        v-model="query.page"
-        :pages="productsPaginatedData.pagination.total_pages"
-        :range-size="2"
+        v-model="NumPage"
+        :pages="reportLastPage"
         active-color="#DCEDFF"
-        @update:modelValue="getResults"
+        @update:modelValue="getAllReports"
       />
-    </div -->
+    </div>
   </div>
 </template>
 
@@ -54,42 +53,53 @@
 import ReportDetail from "@/components/reports/ReportDetail.vue"
 import ReportService from "../../services/ReportService";
 import VPagination from "@hennge/vue3-pagination";
+import { mapGetters,mapActions,mapState } from 'vuex'
 export default {
-  name: "tutorials-list",
+  name: "reports-vuex-list",
   data() {
     return {
-      tutorials: [],
-      currentTutorial: null,
+    //  reports: [],
+      currentReport: null,
       currentIndex: -1,
       title: "",
-       query: {
-        page: 1,
-        search: "",
-      },
+     // last_page:"",
+    NumPage:1
+      //  query: {
+      //   page: 1,
+      //   search: "",
+      // },
     };
   },
   components: {
     ReportDetail,
     VPagination
   },
+  computed:{
+ ...mapGetters(["reportList","reportLastPage"]),
+ ...mapState(["last_page"])
+  },
   methods: {
-    retrieveTutorials() {
-      ReportService.getAll()
-        .then(response => {
-          this.tutorials = response.data;
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
+    ...mapActions(["fetchAllReports"]),
+     getAllReports() {
+       this.fetchAllReports(this.NumPage)
+       console.log(this.NumPage)
+  //     ReportService.getAll(this.NumPage)
+  //       .then(response => {
+  //         this.reports = response.data;
+  //         this.last_page = response.data.meta.last_page;
+  //         console.log(response.data);
+  //       })
+  //       .catch(e => {
+  //         console.log(e);
+  //       });
     },
     refreshList() {
-      this.retrieveTutorials();
-      this.currentTutorial = null;
+      this.getAllReports();
+      this.currentReport = null;
       this.currentIndex = -1;
     },
     setActiveTutorial(tutorial, index) {
-      this.currentTutorial = tutorial;
+      this.currentReport = tutorial;
       this.currentIndex = tutorial ? index : -1;
     },
     removeAllTutorials() {
@@ -106,7 +116,7 @@ export default {
     searchTitle() {
       ReportService.findByTitle(this.title)
         .then(response => {
-          this.tutorials = response.data;
+          this.reports = response.data;
           this.setActiveTutorial(null);
           console.log(response.data);
         })
@@ -115,8 +125,10 @@ export default {
         });
     }
   },
+ 
   mounted() {
-    this.retrieveTutorials();
+    this.getAllReports();
+    
   }
 };
 </script>

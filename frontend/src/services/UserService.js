@@ -1,7 +1,7 @@
 import http from "../http-common";
-class ReportService {
-  getAll(query) {
-   // return http.get(`/report/?page=${query.page}&search=${query.search}`);
+class UserService {
+  getAll() {
+    return http.get('/user');
   }
  
 //   get(id) {
@@ -23,4 +23,4 @@ class ReportService {
 //     return http.get(`/tutorials?title=${title}`);
 //   }
 }
-export default new ReportService();
+export default new UserService();
